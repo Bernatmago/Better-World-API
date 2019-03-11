@@ -28,11 +28,34 @@ testPins = [testPin1, testPin2, testPin3];
 router.get('/pins', async (req, res) => {
     var foundPins = [];
     //var foundPins = {}
-    await Pin.find({}, (err, pin) => {
+    var pinFilter = {}
+    var radius = req.body.radius
+    var center = req.body.center
+    //typeof radius === 'number' && radius > 0 &&
+    if(radius && center) {
+        var minX = center.x - radius
+        var maxX = center.x + radius;
+        var minY = center.y - radius
+        var maxY = center.y + radius;
+        
+        pinFilter = {
+            $and:[
+                {x: {$gte: minX}},
+                {x: {$lte: maxX}},
+                {y: {$gte: minY}},
+                {y: {$lte: maxY}}
+            ]
+        };
+    }
+    Pin.find(pinFilter, (err, pin) => {
         //foundPins[pin._id] = pin
+        if(err){
+            res.status(400).send(err);
+            return;
+        }
         foundPins.push(pin);
-    })
-    res.send({pins: foundPins});
+        res.send({pins: foundPins});
+    });
 });
 //Obtener los pins de test
 router.get('/testPins', async (req, res) => res.send({pins: testPins}));
