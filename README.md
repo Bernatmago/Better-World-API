@@ -27,7 +27,7 @@ Read instructions depending on your os from: https://docs.mongodb.com/manual/ins
 Clone this repository.
 
 ```
-git clone (link missing)
+git clone https://github.com/Bernatmago/Better-World-API.git
 ```
 
 Go to the local repo directory and install dependencies with node package manager.
