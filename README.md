@@ -1,2 +1,43 @@
-# Better-World-API
+# Better World API
+
 Api designed to be used by the Better Word APP, made by UAB Students.
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
+(Pending)See deployment for notes on how to deploy the project on a live system.
+
+### Installing
+
+How to get a development env running.
+
+Install Node.JS LTS version.
+
+```
+Download from https://nodejs.org/en/download/
+Install using default settings
+```
+
+Install MongoDB to use it locally for development purposes.
+
+```
+Read instructions depending on your os from: https://docs.mongodb.com/manual/installation/
+```
+
+Clone this repository.
+
+```
+git clone (link missing)
+```
+
+Go to the local repo directory and install dependencies with node package manager.
+```
+npm install
+```
+
+### Adding Packages
+
+To add a package use node package manager. Save flag is used to add the package to the package.json dependencies file.
+```
+npm install --save <package name>
+```
