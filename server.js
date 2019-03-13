@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('./db/mongoose');
 const bodyParser = require('body-parser');
-const pinRouter = require('./routers/pin');
+const incidenceRouter = require('./routers/incidence');
 const userRouter = require('./routers/user')
 
 const app = express();
@@ -13,7 +13,7 @@ const port = 3000;
 //Pasa el body automaticamente a json
 app.use(bodyParser.json());
 //Routers con las llamadas especificas
-app.use(pinRouter);
+app.use(incidenceRouter);
 app.use(userRouter);
 app.get('/notas', (req, res) => res.send('Tens un 10 crack figura mamut'));
 

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const pinSchema = new mongoose.Schema({
+const incidenceSchema = new mongoose.Schema({
     info: {
         type: String,
         required: true,
@@ -29,6 +29,6 @@ const pinSchema = new mongoose.Schema({
     */
 });
 
-const Pin = mongoose.model('Pin', pinSchema);
+const Incidence = mongoose.model('Incidence', incidenceSchema);
 
-module.exports = Pin;
+module.exports = Incidence;
