@@ -5,7 +5,7 @@ const incidenceRouter = require('./routers/incidence');
 const userRouter = require('./routers/user')
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT  || 3000;
 //Leer fichero de instrucciones
 //La app se inicia en http://localhost:3000/
 //Definimos acciones segun el tipo de peticion
