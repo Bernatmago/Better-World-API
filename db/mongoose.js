@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
-const cred = require('../credentials')
+//const cred = require('../credentials')
 mongoose.Promise = global.Promise;
-mongoose.connect(`mongodb+srv://${cred.mongodb.user}:${cred.mongodb.password}@betterworld-xjdey.mongodb.net/test`,
+
+mongoose.connect(`mongodb+srv://${cred.mongodb.user || process.env.MONGO_USER}:${cred.mongodb.password || process.env.MONGO_PASSWORD}@betterworld-xjdey.mongodb.net/test`,
     {
         connectTimeoutMS: 1000
     })
