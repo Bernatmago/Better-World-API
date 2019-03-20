@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cred = null;
 mongoose.Promise = global.Promise;
 
-mongoose.connect(`mongodb+srv://${cred.mongodb.user || process.env.MONGO_USER}:${cred.mongodb.password || process.env.MONGO_PASSWORD}@betterworld-xjdey.mongodb.net/test`,
+mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@betterworld-xjdey.mongodb.net/test`,
     {
         connectTimeoutMS: 1000
     })
