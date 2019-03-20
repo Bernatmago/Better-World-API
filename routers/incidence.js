@@ -1,6 +1,8 @@
 const express = require('express');
+const multer = require('multer')
 const Incidence = require('../models/incidence');
 const router = new express.Router();
+var upload = multer({dest: 'uploads/'})
 
 //Incidences falsos para desarrollo
 var testIncidence1 = new Incidence({
@@ -70,6 +72,17 @@ router.post('/incidence', async (req, res) => {
     }
     
 });
+/*
+<form action="/profile" method="post" enctype="multipart/form-data">
+  <input type="file" name="avatar" />
+</form>
+*/ 
+router.post('/image', upload.single('avatar'), (req,res) => {
+    const filename = req.file.filename
+    const originalName = req.file.originalname
+    res.send(`Image uploaded with filename: ${filename}, original name was ${originalName}`)
+})
+
 //Añadir incidences
 router.post('/incidences', async (req, res) => {
     //Save an array of incidences
