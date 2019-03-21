@@ -20,6 +20,11 @@ const incidenceSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    images: {
+        type: [String],
+        required: false,
+        maxlength: 5
+    }
     /*
     owner: {
         type: mongoose.Schema.Types.ObjectId,

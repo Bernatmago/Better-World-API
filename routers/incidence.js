@@ -62,36 +62,20 @@ router.get('/incidences', async (req, res) => {
 //Obtener los incidences de test
 router.get('/testIncidences', async (req, res) => res.send({incidences: testIncidences}));
 //Añadir incidence
-router.post('/incidence', async (req, res) => {
-    var newIncidence = new Incidence(req.body.incidence);
+router.post('/incidence', upload.array('images[]'), async (req, res) => {
+    var newIncidence = new Incidence(req.body);
+    const filenames = req.files.map(file => file.filename);
+    newIncidence.images = filenames;
     try{
         await newIncidence.save();
         res.send({incidence: newIncidence});
     }catch(e){
         res.status(400).send(e);
-    }
-    
+    }    
 });
 /*
 <form action="/profile" method="post" enctype="multipart/form-data">
   <input type="file" name="avatar" />
 </form>
 */ 
-router.post('/image', upload.single('avatar'), (req,res) => {
-    const filename = req.file.filename
-    const originalName = req.file.originalname
-    res.send(`Image uploaded with filename: ${filename}, original name was ${originalName}`)
-})
-
-//Añadir incidences
-router.post('/incidences', async (req, res) => {
-    //Save an array of incidences
-    Incidence.create(req.body.incidences, (err, newIncidences) => {
-        if(err){
-            res.status(400).send(err);
-            return;
-        }         
-        res.send({incidences: newIncidences});
-    });  
-});
 module.exports = router;
