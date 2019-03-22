@@ -2,21 +2,19 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 const auth = async (req, res, next) => {
-    try{
-        const token = req.header('x-auth');
-        const decoded = jwt.verify(token, 'privatekeyxd');
-        const user = await User.findOne({ _id: decoded.id, 'tokens.token': token});
 
-        if (!user) {
-            throw new Error();
-        }
+    const token = req.body.token;
+    const decoded = jwt.verify(token, 'privatekeyxd');
+    const user = await User.findOne({phone: decoded.phone, token: token});
 
-        req.token = token;
-        req.user = user;
-        next();
-    }catch(e){
-        res.status(401).send({error: 'Please authenticate'});
+    if (!user) {
+        res.status(401).send(decoded.phone);
+        return;
     }
+
+    req.token = token;
+    req.user = user;
+    next();
 }
 
 module.exports = auth;
