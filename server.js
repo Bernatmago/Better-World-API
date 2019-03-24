@@ -1,11 +1,11 @@
 const express = require('express');
 const mongoose = require('./db/mongoose');
 const bodyParser = require('body-parser');
-const incidenceRouter = require('./routers/incidence');
-const userRouter = require('./routers/user')
-if(process.env.IS_HEROKU){
+if(!process.env.IS_HEROKU){
    require('dotenv').config();
 }
+const incidenceRouter = require('./routers/incidence');
+const userRouter = require('./routers/user');
 const app = express();
 const port = process.env.PORT  || 3000;
 //Leer fichero de instrucciones

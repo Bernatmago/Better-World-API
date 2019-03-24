@@ -2,7 +2,13 @@ const express = require('express');
 const multer = require('multer')
 const Incidence = require('../models/incidence');
 const router = new express.Router();
-var upload = multer({dest: 'uploads/'})
+const upload = multer({dest: 'uploads/'});
+const cloudinary = require('cloudinary');
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_KEY,
+    api_secret: process.env.CLOUD_SECRET
+})
 
 //Incidences falsos para desarrollo
 var testIncidence1 = new Incidence({
@@ -64,7 +70,13 @@ router.get('/testIncidences', async (req, res) => res.send({incidences: testInci
 //Añadir incidence
 router.post('/incidence', upload.array('images[]'), async (req, res) => {
     var newIncidence = new Incidence(req.body);
-    const filenames = req.files.map(file => file.filename);
+    const filenames = req.files.map((file) => {
+        cloudinary.v2.uploader.upload(file.path, (err, res) => {
+            //Aqui borrar arxiu de local
+            console.log(res, err);
+        });
+        return file.filename;
+    });
     newIncidence.images = filenames;
     try{
         await newIncidence.save();

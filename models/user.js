@@ -52,7 +52,7 @@ userSchema.methods.generateAuthToken = async function() {
 
 userSchema.methods.generateSmsCode = async function() {
     const user = this;
-    const smsCode = toString(randomize('0', 6));
+    const smsCode = randomize('0', 6).toString();
     user.smsCode = smsCode;
     await user.save();
     return smsCode;
