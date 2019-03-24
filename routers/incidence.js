@@ -4,6 +4,7 @@ const Incidence = require('../models/incidence');
 const router = new express.Router();
 const upload = multer({dest: 'uploads/'});
 const cloudinary = require('cloudinary');
+const fs = require('fs');
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.CLOUD_KEY,
@@ -35,11 +36,9 @@ testIncidences = [testIncidence1, testIncidence2, testIncidence3];
 //Obtener todos los incidences
 router.get('/incidences', async (req, res) => {
     var foundIncidences = [];
-    //var foundIncidences = {}
     var incidenceFilter = {}
     var radius = req.body.radius
     var center = req.body.center
-    //typeof radius === 'number' && radius > 0 &&
     if(radius && center) {
         var minX = center.x - radius
         var maxX = center.x + radius;
@@ -72,8 +71,8 @@ router.post('/incidence', upload.array('images[]'), async (req, res) => {
     var newIncidence = new Incidence(req.body);
     const filenames = req.files.map((file) => {
         cloudinary.v2.uploader.upload(file.path, (err, res) => {
-            //Aqui borrar arxiu de local
             console.log(res, err);
+            fs.unlinkSync(file.path)
         });
         return file.filename;
     });
