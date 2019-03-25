@@ -3,7 +3,7 @@ const User = require('../models/user');
 
 const auth = async (req, res, next) => {
 
-    const token = req.body.token;
+    const token = req.get('x-auth');
     const decoded = jwt.verify(token, 'privatekeyxd');
     const user = await User.findOne({phone: decoded.phone, token: token});
 
