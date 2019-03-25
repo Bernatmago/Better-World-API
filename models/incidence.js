@@ -20,6 +20,10 @@ const incidenceSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    /*dateCreated: {
+        type: Date,
+        required: true
+    },*/
     images: {
         type: [String],
         required: false,

@@ -77,6 +77,7 @@ router.post('/incidence', upload.array('images[]'), async (req, res) => {
         return file.filename;
     });
     newIncidence.images = filenames;
+    //await newIncidence.dateCreated(Date.now());
     try{
         await newIncidence.save();
         res.send({incidence: newIncidence});

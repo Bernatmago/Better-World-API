@@ -49,6 +49,8 @@ router.post('/verify', async (req, res) => {
             return;
         }
         const token = await user.generateAuthToken();
+        user.smsCode = null;
+        await user.save();
         //jwt.sign({_id: user._id.toString()}, 'privatekeyxd');
         res.send({token})
     });
