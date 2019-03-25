@@ -64,4 +64,5 @@ typings/
 #Credentials
 credentials.js
 
-uploads/
+uploads/*
+!uploads/placeholder.txt
