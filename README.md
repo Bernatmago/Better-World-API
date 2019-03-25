@@ -36,6 +36,7 @@ npm install
 ```
 
 You Must Define a ```.env``` file on the root directory with the following vars
+
 | Name | Value | 
 | ---- | ----- |
 | ACCOUNT_SID | Twilio Account SID |
