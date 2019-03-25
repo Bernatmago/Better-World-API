@@ -44,7 +44,7 @@ You Must Define a ```.env``` file on the root directory with the following vars
 | FROM_PHONE | Twilio Phone Number |
 | MONGO_PASSWORD | MongoDB Password |
 | MONGO_USER | MongoDB User |
-| CLOUT_NAME | Cloudinary Cloud Name |
+| CLOUD_NAME | Cloudinary Cloud Name |
 | CLOUD_KEY | Cloudinary Key |
 | CLOUD_SECRET | Cloudinary Secret |
 
