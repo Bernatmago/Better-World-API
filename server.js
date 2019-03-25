@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 //Routers con las llamadas especificas
 app.use(incidenceRouter);
 app.use(userRouter);
+app.get('/', (req, res) => res.send('App is running!'));
 app.get('/notas', (req, res) => res.send('Tens un 10 crack figura mamut'));
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
