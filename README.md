@@ -35,6 +35,18 @@ Go to the local repo directory and install dependencies with node package manage
 npm install
 ```
 
+You Must Define a ```.env``` file on the root directory with the following vars
+| Name | Value | 
+| ---- | ----- |
+| ACCOUNT_SID | Twilio Account SID |
+| AUTH_TOKEN | Twilio Auth Token |
+| FROM_PHONE | Twilio Phone Number |
+| MONGO_PASSWORD | MongoDB Password |
+| MONGO_USER | MongoDB User |
+| CLOUT_NAME | Cloudinary Cloud Name |
+| CLOUD_KEY | Cloudinary Key |
+| CLOUD_SECRET | Cloudinary Secret |
+
 ### Adding Packages
 
 To add a package use node package manager. Save flag is used to add the package to the package.json dependencies file.
