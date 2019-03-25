@@ -60,7 +60,7 @@ router.get('/incidences', async (req, res) => {
             res.status(400).send(err);
             return;
         }
-        foundIncidences.push(incidence);
+        foundIncidences =incidence;
         res.send({incidences: foundIncidences});
     });
 });
