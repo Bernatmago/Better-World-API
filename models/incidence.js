@@ -8,7 +8,7 @@ const incidenceSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['Destrozo', 'Mejora', 'Limpiaza', 'Averia']
+        enum: ['Destrozo', 'Mejora', 'Limpiaza', 'Averia'],
         //enum: ['problem', 'cleaning', 'idea', 'pokemon'],
         required: true,
         minlength: 5
