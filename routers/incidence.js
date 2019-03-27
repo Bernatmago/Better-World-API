@@ -85,9 +85,16 @@ router.post('/incidence', upload.array('images[]'), async (req, res) => {
         res.status(400).send(e);
     }    
 });
+
 /*
 <form action="/profile" method="post" enctype="multipart/form-data">
   <input type="file" name="avatar" />
 </form>
-*/ 
+*/
+
+router.post('/removeAllIncidences', async (req, res) => {
+    await Incidence.remove({});
+    res.status(200).send('Removed all incidences');
+
+});
 module.exports = router;

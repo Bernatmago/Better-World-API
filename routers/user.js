@@ -73,6 +73,11 @@ router.post('/logout', auth, async (req, res) => {
     }
 });
 
+router.post('/removeAllUsers', async (req, res) => {
+    await User.remove({});
+    res.status(200).send("Removed all users");
+})
+
 module.exports = router;
 
 /*

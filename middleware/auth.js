@@ -8,7 +8,7 @@ const auth = async (req, res, next) => {
     const user = await User.findOne({phone: decoded.phone, token: token});
 
     if (!user) {
-        res.status(401).send(decoded.phone);
+        res.status(401).send("No user found");
         return;
     }
 
