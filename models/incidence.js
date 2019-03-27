@@ -8,7 +8,8 @@ const incidenceSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['problem', 'cleaning', 'idea', 'pokemon'],
+        enum: ['Destrozo', 'Mejora', 'Limpiaza', 'Averia']
+        //enum: ['problem', 'cleaning', 'idea', 'pokemon'],
         required: true,
         minlength: 5
     },
@@ -28,6 +29,11 @@ const incidenceSchema = new mongoose.Schema({
         type: [String],
         required: false,
         maxlength: 5
+    },
+    likes: {
+        type: Number,
+        required: true,
+        default: 0
     }
     /*
     owner: {
