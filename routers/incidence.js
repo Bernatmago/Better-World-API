@@ -85,6 +85,22 @@ router.post('/incidence', upload.array('images[]'), async (req, res) => {
         res.status(400).send(e);
     }    
 });
+//EN PROGRESO SOLUCIONADA PENDIENTE
+router.patch('/incidence/:id', async (req, res) => {
+    var updateObject = req.body.incidence;
+    var id = req.params.id;
+    await Incidence.findOneAndUpdate({_id: ObjectId(id)},{$set: updateObject}, {new: true},
+        (err, incidence) => {
+            if (err){
+                res.status(400).send(err);
+                return;
+            }
+            res.status(200).send(incidence);
+    });
+    
+})
+
+router.patch('/incidence/like/:id', as)
 
 /*
 <form action="/profile" method="post" enctype="multipart/form-data">
