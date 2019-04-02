@@ -21,10 +21,6 @@ const incidenceSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    /*dateCreated: {
-        type: Date,
-        required: true
-    },*/
     images: {
         type: [String],
         required: false,
@@ -34,14 +30,17 @@ const incidenceSchema = new mongoose.Schema({
         type: Number,
         required: true,
         default: 0
-    }
-    /*
+    },    
     owner: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
+        //required: true,
         ref:  'User'
+    },
+    likedUsers: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'User'
     }
-    */
+
 });
 
 incidenceSchema.methods.toJSON = function () {
@@ -51,8 +50,21 @@ incidenceSchema.methods.toJSON = function () {
    incidenceObject.createdAt = incidence._id.getTimestamp();
     delete incidenceObject.tokens;
     return incidenceObject;
-}
+};
 
+incidenceSchema.methods.addLike = async function(userId) {
+    const incidence = this;
+    const uId = await mongoose.Types.ObjectId(userId);
+
+    if (!incidence.likedUsers.find((likedId) => {
+        return likedId.equals(uId);
+    })) {
+        incidence.likes =+ 1;
+        incidence.likedUsers.push(uId);
+        await incidence.save();    
+    }  
+    return incidence;
+};
 const Incidence = mongoose.model('Incidence', incidenceSchema);
 
 module.exports = Incidence;

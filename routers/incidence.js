@@ -1,5 +1,6 @@
 const express = require('express');
 const multer = require('multer')
+const auth = require('../middleware/auth');
 const Incidence = require('../models/incidence');
 const router = new express.Router();
 const upload = multer({dest: 'uploads/'});
@@ -34,7 +35,7 @@ var testIncidence3 = new Incidence({
 testIncidences = [testIncidence1, testIncidence2, testIncidence3];
 
 //Obtener todos los incidences
-router.get('/incidences', async (req, res) => {
+router.get('/incidences', auth, async (req, res) => {
     var foundIncidences = [];
     var incidenceFilter = {}
     var radius = req.body.radius
@@ -54,14 +55,13 @@ router.get('/incidences', async (req, res) => {
             ]
         };
     }
-    Incidence.find(incidenceFilter, (err, incidence) => {
+    Incidence.find(incidenceFilter, (err, incidences) => {
         //foundIncidences[incidence._id] = incidence
         if(err){
             res.status(400).send(err);
             return;
         }
-        foundIncidences =incidence;
-        res.send({incidences: foundIncidences});
+        res.send({incidences});
     });
 });
 //Obtener los incidences de test
@@ -85,22 +85,38 @@ router.post('/incidence', upload.array('images[]'), async (req, res) => {
         res.status(400).send(e);
     }    
 });
+
+
 //EN PROGRESO SOLUCIONADA PENDIENTE
-router.patch('/incidence/:id', async (req, res) => {
+router.patch('/incidence/:id/update', auth, async (req, res) => {
     var updateObject = req.body.incidence;
-    var id = req.params.id;
-    await Incidence.findOneAndUpdate({_id: ObjectId(id)},{$set: updateObject}, {new: true},
-        (err, incidence) => {
+    const id = req.params.id;
+    Incidence.findOneAndUpdate({_id: ObjectId(id)},{$set: updateObject}, {new: true}, (err, incidence) => {
             if (err){
                 res.status(400).send(err);
                 return;
             }
-            res.status(200).send(incidence);
+            if(!incidence){
+                res.status(400).send('No incidence found');
+            }
+            res.status(200).send(incidence);        
     });
-    
-})
+});
 
-router.patch('/incidence/like/:id', as)
+router.post('/incidence/:id/like', auth, async (req, res) => {
+    const id = req.params.id;
+    Incidence.findById(ObjectId(id), (err, incidence) =>{
+        if (err){
+            res.status(400).send(err);
+            return;
+        }
+        if(!incidence){
+            res.status(400).send('Cant like incidence, doesnt exist!');
+        }
+        const updatedIncidence = incidence.addLike();
+        res.status(200).send(updatedIncidence);  
+    });
+})
 
 /*
 <form action="/profile" method="post" enctype="multipart/form-data">
@@ -108,7 +124,7 @@ router.patch('/incidence/like/:id', as)
 </form>
 */
 
-router.post('/removeAllIncidences', async (req, res) => {
+router.post('/removeAllIncidences', auth, async (req, res) => {
     await Incidence.remove({});
     res.status(200).send('Removed all incidences');
 
