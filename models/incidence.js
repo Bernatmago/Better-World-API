@@ -44,6 +44,15 @@ const incidenceSchema = new mongoose.Schema({
     */
 });
 
+incidenceSchema.methods.toJSON = function () {
+    const incidence = this;
+    const incidenceObject = incidence.toObject();
+
+   incidenceObject.createdAt = incidence._id.getTimestamp();
+    delete incidenceObject.tokens;
+    return incidenceObject;
+}
+
 const Incidence = mongoose.model('Incidence', incidenceSchema);
 
 module.exports = Incidence;
