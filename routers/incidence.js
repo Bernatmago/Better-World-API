@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer')
 const auth = require('../middleware/auth');
 const Incidence = require('../models/incidence');
+const mongoose = require('mongoose');
 const router = new express.Router();
 const upload = multer({dest: 'uploads/'});
 const cloudinary = require('cloudinary');
@@ -91,7 +92,7 @@ router.post('/incidence', upload.array('images[]'), async (req, res) => {
 router.patch('/incidence/:id/update', auth, async (req, res) => {
     var updateObject = req.body.incidence;
     const id = req.params.id;
-    Incidence.findOneAndUpdate({_id: ObjectId(id)},{$set: updateObject}, {new: true}, (err, incidence) => {
+    Incidence.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)},{$set: updateObject}, {new: true}, (err, incidence) => {
             if (err){
                 res.status(400).send(err);
                 return;
@@ -105,15 +106,16 @@ router.patch('/incidence/:id/update', auth, async (req, res) => {
 
 router.post('/incidence/:id/like', auth, async (req, res) => {
     const id = req.params.id;
-    Incidence.findById(ObjectId(id), (err, incidence) =>{
+    Incidence.findById(mongoose.Types.ObjectId(id), (err, incidence) =>{
         if (err){
             res.status(400).send(err);
             return;
         }
         if(!incidence){
             res.status(400).send('Cant like incidence, doesnt exist!');
+            return;
         }
-        const updatedIncidence = incidence.addLike();
+        const updatedIncidence = incidence.addLike(req.user._id);
         res.status(200).send(updatedIncidence);  
     });
 })
@@ -125,7 +127,7 @@ router.post('/incidence/:id/like', auth, async (req, res) => {
 */
 
 router.post('/removeAllIncidences', auth, async (req, res) => {
-    await Incidence.remove({});
+    await Incidence.deleteMany({});
     res.status(200).send('Removed all incidences');
 
 });

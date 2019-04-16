@@ -8,7 +8,8 @@ if (process.env.IS_HEROKU){
 }
 mongoose.connect(mongoUri,
     {
-        connectTimeoutMS: 10000
+        connectTimeoutMS: 10000,
+        useNewUrlParser: true
     })
     .then(() => console.log('connection succesful'))
     .catch((err) => console.error(err));

@@ -13,6 +13,13 @@ const incidenceSchema = new mongoose.Schema({
         required: true,
         minlength: 5
     },
+    status: {
+        type: String,
+        required: true,
+        enum: ['Pendiente', 'Progreso', 'Solucionada'],
+        default: 'Pendiente'
+
+    },
     x: {
         type: Number,
         required: true
@@ -52,16 +59,16 @@ incidenceSchema.methods.toJSON = function () {
     return incidenceObject;
 };
 
-incidenceSchema.methods.addLike = async function(userId) {
+incidenceSchema.methods.addLike = function(userId) {
     const incidence = this;
-    const uId = await mongoose.Types.ObjectId(userId);
+    const uId = userId;//mongoose.Types.ObjectId(userId);
 
     if (!incidence.likedUsers.find((likedId) => {
         return likedId.equals(uId);
     })) {
-        incidence.likes =+ 1;
+        incidence.likes = incidence.likes + 1;
         incidence.likedUsers.push(uId);
-        await incidence.save();    
+        incidence.save();    
     }  
     return incidence;
 };
