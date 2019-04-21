@@ -33,6 +33,13 @@ const userSchema  = new mongoose.Schema({
         default: null,
         type: String,
         required: false
+    },
+    //Si llega a 0 no puede mas
+    postPoints: {
+        type: Number,
+        default: 3,
+        required: true,
+        min: 0        
     }
 });
 

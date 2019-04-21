@@ -66,10 +66,14 @@ router.get('/incidences', auth, async (req, res) => {
     });
 });
 //Obtener los incidences de test
-router.get('/testIncidences', async (req, res) => res.send({incidences: testIncidences}));
+router.get('/incidence/test', async (req, res) => res.send({incidences: testIncidences}));
 //Añadir incidence
 router.post('/incidence', upload.array('images[]'), async (req, res) => {
     var newIncidence = new Incidence(req.body);
+    if (req.user.posPoints < 1){
+        res.status(400).send("Cant post more incidences");
+    }
+    newIncidence.owner = req.user._id;
     const filenames = req.files.map((file) => {
         cloudinary.v2.uploader.upload(file.path, (err, res) => {
             console.log(res, err);
@@ -87,9 +91,20 @@ router.post('/incidence', upload.array('images[]'), async (req, res) => {
     }    
 });
 
+//Obtener incidencia por id
+router.get('/incidence/:id', async (req, res) => {
+    Incidence.findById(mongoose.Types.ObjectId(req.params.id), (err, incidence) => {
+        if(err){
+            res.status(400).send(err);
+            return;
+        }
+        res.status(200).send({incidence});
+    });
+});
+
 
 //EN PROGRESO SOLUCIONADA PENDIENTE
-router.patch('/incidence/:id/update', auth, async (req, res) => {
+router.patch('/incidence/:id', auth, async (req, res) => {
     var updateObject = req.body.incidence;
     const id = req.params.id;
     Incidence.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)},{$set: updateObject}, {new: true}, (err, incidence) => {
@@ -126,7 +141,7 @@ router.post('/incidence/:id/like', auth, async (req, res) => {
 </form>
 */
 
-router.post('/removeAllIncidences', auth, async (req, res) => {
+router.delete('/incidence/removeAll', auth, async (req, res) => {
     await Incidence.deleteMany({});
     res.status(200).send('Removed all incidences');
 
