@@ -68,10 +68,11 @@ router.get('/incidences', auth, async (req, res) => {
 //Obtener los incidences de test
 router.get('/incidence/test', async (req, res) => res.send({incidences: testIncidences}));
 //Añadir incidence
-router.post('/incidence', upload.array('images[]'), async (req, res) => {
+router.post('/incidence', auth, upload.array('images[]'), async (req, res) => {
     var newIncidence = new Incidence(req.body);
     if (req.user.posPoints < 1){
         res.status(400).send("Cant post more incidences");
+        return;
     }
     newIncidence.owner = req.user._id;
     const filenames = req.files.map((file) => {
@@ -92,7 +93,7 @@ router.post('/incidence', upload.array('images[]'), async (req, res) => {
 });
 
 //Obtener incidencia por id
-router.get('/incidence/:id', async (req, res) => {
+router.get('/incidence/:id', auth, async (req, res) => {
     Incidence.findById(mongoose.Types.ObjectId(req.params.id), (err, incidence) => {
         if(err){
             res.status(400).send(err);

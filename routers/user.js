@@ -1,14 +1,25 @@
 const express = require('express');
 const User = require('../models/user');
 const auth = require('../middleware/auth');
+var schedule = require('node-schedule');
 const accountSid = process.env.ACCOUNT_SID;
 const authToken = process.env.AUTH_TOKEN;
 const smsClient = require('twilio')(accountSid, authToken);
 const router = new express.Router();
 
+//Reset user post counter
+var postPointsJob = schedule.scheduleJob({hour: 5}, ()=> {
+    User.updateMany({}, { postPoints: 3});
+    console.log('Resetted user count');
+});
+
 //Create the user in the database and send an sms code back
 router.post('/user/register', async (req, res) => {
     User.findOne({phone: req.body.user.phone}, async (err, user) => {
+        if(err){
+            res.status(400).send(err);
+            return;
+        }
         if(!user){
             user = new User(req.body.user);
         }
