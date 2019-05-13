@@ -4,7 +4,7 @@ const cred = null;
 mongoose.Promise = global.Promise;
 var mongoUri = 'mongodb://localhost/bw';
 if (process.env.IS_HEROKU){
-    mongoUri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@betterworld-xjdey.mongodb.net/bw`;
+    mongoUri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@betterworld-xjdey.mongodb.net/test`;
 }
 mongoose.connect(mongoUri,
     {
