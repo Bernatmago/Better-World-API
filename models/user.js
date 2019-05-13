@@ -6,13 +6,13 @@ var randomize = require('randomatic');
 
 
 const userSchema  = new mongoose.Schema({
-    username: {
+    /*username: {
         type: String,
         unique: true,
         required: true,
         minlength: 5,
         trim:true
-    },
+    },*/
     phone: {
         type: String,
         required: true,
