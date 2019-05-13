@@ -1,5 +1,6 @@
 const express = require('express');
-const multer = require('multer')
+const multer = require('multer');
+const moment = require('moment');
 const auth = require('../middleware/auth');
 const Incidence = require('../models/incidence');
 const mongoose = require('mongoose');
@@ -39,13 +40,14 @@ testIncidences = [testIncidence1, testIncidence2, testIncidence3];
 router.get('/incidences', auth, async (req, res) => {
     var foundIncidences = [];
     var incidenceFilter = {}
-    var radius = req.body.radius
-    var center = req.body.center
-    if(radius && center) {
-        var minX = center.x - radius
-        var maxX = center.x + radius;
-        var minY = center.y - radius
-        var maxY = center.y + radius;
+    var radius = req.query.radius
+    var x = req.query.x
+    var y = req.query.y
+    if(radius && x && y) {
+        var minX = x - radius
+        var maxX = x + radius;
+        var minY = y - radius
+        var maxY = y + radius;
         
         incidenceFilter = {
             $and:[
@@ -103,8 +105,34 @@ router.get('/incidence/:id', auth, async (req, res) => {
     });
 });
 
+//Contar incidencias (ALL)
+//TODO: No va el filtro
+router.get('/incidences/count', auth, (req,res) => {
+    var filter = {};
+    var filterDate = req.body.countDate;
+    /*if(filterDate) {
+        filter = {
+            createdAt: {
+                $gt: moment(filterDate).startOf('day').format("YYYY-MM-DDTHH:mm:ss.SSSZ"),
+                $lt: moment(filterDate).startOf('day').add('1', 'day').format("YYYY-MM-DDTHH:mm:ss.SSSZ")
+            }
+        }
+    }*/
+    //Afegir filte
+    //incidence._id.getTimestamp();
+    Incidence.estimatedDocumentCount(filter, (err, nIncidences) => {
+        if(err){
+            res.status(400).send(err);
+            return;
+        }
+        res.status(200).send({
+            count : nIncidences,
+            filter
+        });
+    });
+});
 
-//EN PROGRESO SOLUCIONADA PENDIENTE
+//Edit incidence by id
 router.patch('/incidence/:id', auth, async (req, res) => {
     var updateObject = req.body.incidence;
     const id = req.params.id;
@@ -120,21 +148,43 @@ router.patch('/incidence/:id', auth, async (req, res) => {
     });
 });
 
+//Like incidence
 router.post('/incidence/:id/like', auth, async (req, res) => {
     const id = req.params.id;
     Incidence.findById(mongoose.Types.ObjectId(id), (err, incidence) =>{
-        if (err){
+        if(err) {
             res.status(400).send(err);
             return;
         }
-        if(!incidence){
+        if(!incidence) {
             res.status(400).send('Cant like incidence, doesnt exist!');
             return;
         }
         const updatedIncidence = incidence.addLike(req.user._id);
         res.status(200).send(updatedIncidence);  
     });
-})
+});
+
+//Flag incidence
+//TODO: FIX
+router.post('incidence/:id/flag', auth, async (req, res) => {
+    if(!req.user.isAdmin) {
+        res.status(400).send('You are not an admin, Crack!')
+        return;
+    }
+    Incidence.findById(mongoose.Types.ObjectId(id), (err, incidence) =>{
+        if(err) {
+            res.status(400).send(err);
+            return;
+        }
+        if(!incidence) {
+            res.status(400).send('Cant flag incidence, doesnt exist!');
+            return;
+        }
+        const updatedIncidence = incidence.flag(true);
+        res.status(200).send(updatedIncidence);  
+    });
+});
 
 /*
 <form action="/profile" method="post" enctype="multipart/form-data">

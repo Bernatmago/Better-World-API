@@ -46,6 +46,16 @@ const incidenceSchema = new mongoose.Schema({
     likedUsers: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'User'
+    },
+    createdAt: {
+        type: Date,
+        required: true,
+        default: new Date()
+    },
+    flag: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 
 });
@@ -54,7 +64,7 @@ incidenceSchema.methods.toJSON = function () {
     const incidence = this;
     const incidenceObject = incidence.toObject();
 
-   incidenceObject.createdAt = incidence._id.getTimestamp();
+   //incidenceObject.createdAt = incidence._id.getTimestamp();
     delete incidenceObject.tokens;
     return incidenceObject;
 };
@@ -72,6 +82,12 @@ incidenceSchema.methods.addLike = function(userId) {
     }  
     return incidence;
 };
+incidenceSchema.methods.flagIncidence = function(flagStatus) {
+    const incidence = this;
+    incidence.flag = flagStatus;
+    incidence.save();
+    return incidence;
+}
 const Incidence = mongoose.model('Incidence', incidenceSchema);
 
 module.exports = Incidence;
