@@ -1,5 +1,5 @@
 const express = require('express');
-const mongoose = require('./db/mongoose');
+const db = require('./db/mongoose');
 const bodyParser = require('body-parser');
 if(!process.env.IS_HEROKU){
    require('dotenv').config();
@@ -20,4 +20,11 @@ app.use(userRouter);
 app.get('/', (req, res) => res.send('App is running!'));
 app.get('/notas', (req, res) => res.send('Tens un 10 crack figura mamut'));
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+db(() => {
+   app.listen(port, () => {
+      console.log(`Example app listening on port ${port}!`);
+      app.emit('appStarted');
+   });
+});
+
+module.exports = app;
