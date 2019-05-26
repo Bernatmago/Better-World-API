@@ -1,4 +1,5 @@
 const assert = require('chai').assert;
+const mongoose = require('mongoose');
 
 describe('Test del test', function() {
     var db = 'Nos conectamos y demas'
